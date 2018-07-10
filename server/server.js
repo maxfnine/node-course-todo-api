@@ -1,49 +1,32 @@
-const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
+const express = require('express');
+const bodyParser = require('body-parser');
 
+const {mongoose} = require('./db/mongoose.js');
+const {Todo} = require('./models/todo');
+const {User} = require('./models/user');
 
-mongoose.connect('mongodb://localhost:27017/TodoApp');
-var Todo = mongoose.model('Todo',{
-    text:{
-        type:String,
-        required:true,
-        minlength:1,
-        trim:true
-    },
-    completed:{
-        type:Boolean,
-        default:false
-    },
-    completedAt:{
-        type:Number
-    }
+var app = express();
+app.use(bodyParser.json());
+
+app.post('/todos',(req,res)=>{
+var {text,completed,completedAt}=req.body;
+var todo = new Todo({text,completed,completedAt});
+todo.save().then((result)=>{
+    res.send(result);
+},(err)=>{
+    res.status(400).send(err);
 });
 
-var User = mongoose.model('User',{
-    email:{
-        type:String,
-        required:true,
-        trim:true,
-        minlength:1
-    }
 });
 
-// var todo = new Todo({
-//     text:'Done with Mongoose',
-//     completed:true,
-//     completedAt:1000
-// });
 
-// todo.save().then((result)=>{console.log('Todo',JSON.stringify(result,undefined,2));
-// },(err)=>{console.log(err);
-// });
 
-var user = new User({
-    email:'maxfnine@gmail.com'
+app.listen(3000,()=>{
+    console.log('Listening on port 3000');
+    
 });
 
-user.save().then((result)=>{console.log('User',JSON.stringify(result,undefined,2));
-},(err)=>{console.log(err);
-});
+
+
 
 
