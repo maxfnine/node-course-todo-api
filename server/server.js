@@ -3,8 +3,8 @@ var bodyParser = require('body-parser');
 var { ObjectID } = require('mongodb');
 
 var { mongoose } = require('./db/mongoose');
-var { Todo } = require('./../server/models/todo');
-var { User } = require('./../server/models/user');
+var { Todo } = require('./models/todo.js');
+var { User } = require('./models/user.js');
 
 var app = express();
 const port = process.env.PORT || 3000;
