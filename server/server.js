@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var { ObjectID } = require('mongodb');
 
 var { mongoose } = require('./db/mongoose');
-var { Todo } = require('./models/Todo');
+var { Todo } = require('./../server/models/todo');
 var { User } = require('./models/user');
 
 var app = express();
@@ -50,6 +50,26 @@ app.get('/todos/:id', (req, res) => {
     })
   }
 
+});
+
+app.delete('/todos/:id',(req,res)=>{
+  var id = req.params.id;
+  if (!ObjectID.isValid(id)) {
+    res.status(404).send({});
+  }
+  else{
+    Todo.findByIdAndRemove(id).then((result)=>{
+      if(result)
+      {
+        return res.status(200).send(result);
+      }
+      else{
+        return res.status(404).send();
+      }
+    }).catch((err)=>{
+      return res.status(400).send(err);
+    })
+  }
 });
 
 app.listen(port, () => {
