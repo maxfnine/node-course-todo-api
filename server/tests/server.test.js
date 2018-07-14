@@ -165,7 +165,7 @@ describe('PATCH /todos/:id',()=>{
 
   });
 
-  it('should clear copletedAT when todo is not completed',(done)=>{
+  it('should clear completedAT when todo is not completed',(done)=>{
     request(app)
     .patch(`/todos/${id}`)
     .send({text,completed:false})
