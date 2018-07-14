@@ -101,10 +101,17 @@ app.patch('/todos/:id',(req,res)=>{
    .catch((err)=>{
     return res.status(400).send(err);
    })
+});
+
+app.post('/users',(req,res)=>{
+  var body = _.pick(req.body,['email','password']);
+  var user = new User(body);
+  user.save().then((result)=>{
+    res.send(result);
+  },(err)=>{res.status(400).send(err)});
+});
 
 
-
-})
 
 
 
