@@ -7,7 +7,7 @@ const {ObjectID} = require('mongodb');
 
 const todos=[
     {text:'First test todo',_id: new ObjectID()},
-    {text:'Second test todo',_id: new ObjectID()}
+    {text:'Second test todo',_id: new ObjectID(),completed:false,completedAt:123456}
 ]
 
 beforeEach((done) => {
@@ -135,5 +135,57 @@ describe('DELETE /todos/:id',()=>{
     .end(done);
 
    });
+
+});
+
+describe('PATCH /todos/:id',()=>{
+  var id = todos[1]._id.toHexString();
+  var text = 'This is a test';
+  it('should update the todo ',(done)=>{
+    request(app)
+    .patch(`/todos/${id}`)
+    .send({text,completed:true})
+    .expect(200)
+    .expect((res)=>{
+      var todo = res.body.todo;
+      expect(todo.text).toBe(text);
+      expect(todo.completedAt).toBeA('number');
+      expect(todo.completed).toBeTruthy();
+    })
+    .end((err, res) => {
+      if (err) {
+        return done(err);
+      }
+
+      Todo.findById(id).then((result) => {
+        expect(result.text).toBe(text);
+        done();
+      }).catch((e) => done(e));
+    });
+
+  });
+
+  it('should clear copletedAT when todo is not completed',(done)=>{
+    request(app)
+    .patch(`/todos/${id}`)
+    .send({text,completed:false})
+    .expect(200)
+    .expect((res)=>{
+      var todo = res.body.todo;
+      expect(todo.completedAt).toNotExist();
+    })
+    .end((err, res) => {
+      if (err) {
+        return done(err);
+      }
+
+      Todo.findById(id).then((result) => {
+        expect(result.text).toBe(text);
+        done();
+      }).catch((e) => done(e));
+    });
+
+
+  });
 
 })
