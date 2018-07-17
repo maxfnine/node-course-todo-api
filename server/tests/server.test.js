@@ -178,9 +178,7 @@ describe('PATCH /todos/:id', () => {
           done();
         }).catch((e) => done(e));
       });
-
-
-  });
+    });
 
 });
 
