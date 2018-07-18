@@ -12,7 +12,7 @@ email:'user1@pass.com',
 password:'user1pass',
 tokens:[{
     access:'auth',
-    token:jwt.sign({_id:userOneID,access:'auth'},'abc123').toString()
+    token:jwt.sign({_id:userOneID,access:'auth'},process.env.JWT_SECRET).toString()
 }]
 },
 {
@@ -21,7 +21,7 @@ tokens:[{
     password:'user2pass',
     tokens:[{
         access:'auth',
-        token:jwt.sign({_id:userTwoID,access:'auth'},'abc123').toString()
+        token:jwt.sign({_id:userTwoID,access:'auth'},process.env.JWT_SECRET).toString()
     }]
 }];
 
